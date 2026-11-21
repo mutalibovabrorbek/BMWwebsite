@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW Official Showroom | Sheer Driving Pleasure</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=BMW+TypeNext:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Three.js CDN for 3D Showroom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <!-- TOP NOTIFICATION BAR -->
+    <div class="top-bar">
+        <div class="container top-bar-flex">
+            <span>Experience the all-new electric lineup. Book your test drive today.</span>
+            <div class="top-bar-links">
+                <a href="#contact">Find a Dealer</a>
+                <a href="#about">BMW Financial Services</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1 — NAVBAR -->
+    <header id="navbar" class="sticky-nav">
+        <div class="container nav-container">
+            <a href="#" class="brand-logo">
+                <svg class="bmw-logo" viewBox="0 0 100 100" width="45" height="45">
+                    <circle cx="50" cy="50" r="48" fill="#000" stroke="#fff" stroke-width="2"/>
+                    <path d="M50 2 A 48 48 0 0 1 98 50 L 50 50 Z" fill="#0066B1"/>
+                    <path d="M50 98 A 48 48 0 0 1 2 50 L 50 50 Z" fill="#0066B1"/>
+                    <text x="32" y="20" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">B</text>
+                    <text x="58" y="20" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">M</text>
+                    <text x="78" y="42" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">W</text>
+                </svg>
+                <span class="logo-text">BMW</span>
+            </a>
+
+            <nav class="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active" data-i18n="nav_home">Home</a></li>
+                    <li><a href="#models" class="nav-link" data-i18n="nav_models">Models</a></li>
+                    <li><a href="#electric" class="nav-link" data-i18n="nav_electric">Electric</a></li>
+                    <li><a href="#bmw-m" class="nav-link" data-i18n="nav_m">BMW M</a></li>
+                    <li><a href="#showroom-3d" class="nav-link" data-i18n="nav_showroom">3D Showroom</a></li>
+                    <li><a href="#offers" class="nav-link" data-i18n="nav_offers">Offers</a></li>
+                    <li><a href="#about" class="nav-link" data-i18n="nav_about">About</a></li>
+                    <li><a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="search-btn" class="icon-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+                <button id="cart-btn" class="icon-btn cart-badge-wrapper" aria-label="Cart"><i class="fas fa-shopping-bag"></i><span id="cart-count">0</span></button>
+                <button id="favorites-btn" class="icon-btn cart-badge-wrapper" aria-label="Favorites"><i class="fas fa-heart"></i><span id="fav-count">0</span></button>
+                
+                <div class="lang-selector">
+                    <select id="language-select">
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                        <option value="uz">UZ</option>
+                    </select>
+                </div>
+
+                <div class="auth-buttons">
+                    <button id="login-open-btn" class="btn-outline" data-i18n="btn_login">Login</button>
+                    <button id="register-open-btn" class="btn-solid" data-i18n="btn_register">Register</button>
+                    <div id="user-profile-menu" class="hidden">
+                        <span id="username-display">User</span>
+                        <button id="logout-btn" class="btn-text">Logout</button>
+                    </div>
+                </div>
+
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SEARCH OVERLAY MODAL -->
+    <div id="search-modal" class="modal-overlay hidden">
+        <div class="search-modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Search BMW Models</h2>
+            <div class="search-input-wrapper">
+                <input type="text" id="site-search-input" placeholder="Search by model, series, or feature (e.g., M4, X5, Electric)...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div id="search-results-container" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 — HERO -->
+    <section id="home" class="hero-section">
+        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1920&auto=format&fit=crop');">
+            <div class="container hero-content">
+                <span class="sub-badge" data-i18n="hero_badge">THE ALL-NEW ELECTRIC & PERFORMANCE RANGE</span>
+                <h1 class="hero-title" data-i18n="hero_title">THE JOY OF DRIVING.</h1>
+                <p class="hero-subtitle" data-i18n="hero_subtitle">Immerse yourself in unrivaled luxury, dynamic performance, and cutting-edge electric innovation.</p>
+                <div class="hero-btns">
+                    <a href="#models" class="btn-solid large" data-i18n="btn_explore">Explore Models</a>
+                    <a href="#showroom-3d" class="btn-outline large" data-i18n="btn_discover">Interactive 3D Showroom</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 — CAROUSEL -->
+    <section id="models" class="carousel-section section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">LINEUP</span>
+                <h2 class="section-title" data-i18n="carousel_heading">Featured BMW Fleet</h2>
+                <p class="section-desc">Explore our flagship sedans, luxury SAVs, and high-performance M models.</p>
+            </div>
+
+            <div class="car-carousel-wrapper">
+                <button class="carousel-control prev" id="carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="car-carousel-track-container">
+                    <div class="car-carousel-track" id="carousel-track">
+                        <!-- Dynamically populated via script.js -->
+                    </div>
+                </div>
+                <button class="carousel-control next" id="carousel-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="carousel-indicators" id="carousel-indicators"></div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 — INTERACTIVE 3D SHOWROOM -->
+    <section id="showroom-3d" class="showroom-section section-padding bg-dark">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag">VIRTUAL EXPERIENCE</span>
+                <h2 class="section-title text-white" data-i18n="showroom_heading">Interactive 3D BMW Showroom</h2>
+                <p class="section-desc text-light">Rotate, zoom, and customize your dream BMW in real-time 3D space.</p>
+            </div>
+
+            <div class="showroom-container">
+                <div id="canvas-container">
+                    <div id="loading-overlay" class="loading-overlay">
+                        <div class="spinner"></div>
+                        <p>Loading 3D Showroom...</p>
+                    </div>
+                </div>
+                <div class="showroom-controls">
+                    <h3>Customize Exterior</h3>
+                    <div class="color-picker-group">
+                        <button class="color-btn active" style="background-color: #1c2833;" data-color="0x1c2833" title="Alpine Black"></button>
+                        <button class="color-btn" style="background-color: #e5e8e8;" data-color="0xe5e8e8" title="Mineral White"></button>
+                        <button class="color-btn" style="background-color: #0066B1;" data-color="0x0066B1" title="BMW Marina Bay Blue"></button>
+                        <button class="color-btn" style="background-color: #b03a2e;" data-color="0xb03a2e" title="Toronto Red Metallic"></button>
+                        <button class="color-btn" style="background-color: #5d6d7e;" data-color="0x5d6d7e" title="Dravit Grey"></button>
+                    </div>
+                    <div class="view-options">
+                        <button id="reset-cam-btn" class="btn-outline">Reset View</button>
+                        <button id="toggle-spin-btn" class="btn-outline">Toggle Auto-Spin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 — CAR CATALOG -->
+    <section id="catalog" class="catalog-section section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">CONFIGURATOR & INVENTORY</span>
+                <h2 class="section-title" data-i18n="catalog_heading">Complete BMW Catalog</h2>
+                <p class="section-desc">Filter by category, sort by price, and find your perfect specification.</p>
+            </div>
+
+            <div class="catalog-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Models</button>
+                    <button class="filter-btn" data-filter="sedan">Sedan</button>
+                    <button class="filter-btn" data-filter="suv">SUV / SAV</button>
+                    <button class="filter-btn" data-filter="coupe">Coupe</button>
+                    <button class="filter-btn" data-filter="electric">Electric (i)</button>
+                    <button class="filter-btn" data-filter="m">BMW M</button>
+                </div>
+                <div class="sort-search-group">
+                    <select id="sort-select">
+                        <option value="featured">Sort by: Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="hp">Horsepower</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="car-grid" id="car-grid-container">
+                <!-- Dynamically populated via script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6 — CAR DETAILS MODAL -->
+    <div id="car-details-modal" class="modal-overlay hidden">
+        <div class="details-modal-content">
+            <button class="close-modal">&times;</button>
+            <div id="details-body" class="details-grid">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 7 — AUTHENTICATION MODALS -->
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="auth-modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="auth-tabs">
+                <button id="tab-login-btn" class="auth-tab active">Login</button>
+                <button id="tab-reg-btn" class="auth-tab">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <h3>Welcome Back</h3>
+                <div class="form-group">
+                    <label>Email or Phone</label>
+                    <input type="text" id="login-identifier" required placeholder="Enter email or phone">
+                </div>
+                <div class="form-group password-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required placeholder="Enter password">
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+                <div id="login-error" class="error-msg hidden"></div>
+                <button type="submit" class="btn-solid full-width">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden">
+                <h3>Create BMW ID</h3>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="reg-name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="reg-phone" required placeholder="+998 90 123 45 67">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="reg-email" required placeholder="john@example.com">
+                </div>
+                <div class="form-group password-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" required placeholder="Create secure password">
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+                <div class="form-group password-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="reg-confirm" required placeholder="Confirm password">
+                </div>
+                <div id="reg-error" class="error-msg hidden"></div>
+                <button type="submit" class="btn-solid full-width">Register Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SECTION 8, 9, 10 — CART & CHECKOUT MODAL -->
+    <div id="cart-checkout-modal" class="modal-overlay hidden">
+        <div class="checkout-modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="checkout-wrapper">
+                <div class="cart-summary-pane">
+                    <h3>Your Shopping Bag</h3>
+                    <div id="cart-items-list" class="cart-items-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <div class="cart-total-box">
+                        <div class="flex-between"><span>Subtotal:</span><span id="cart-subtotal">$0</span></div>
+                        <div class="flex-between"><span>Estimated Tax & Delivery:</span><span>$1,500</span></div>
+                        <hr>
+                        <div class="flex-between total-row"><span>Total:</span><span id="cart-grand-total">$0</span></div>
+                    </div>
+                </div>
+
+                <div class="checkout-pane">
+                    <h3>Choose Payment & Delivery</h3>
+                    <div class="payment-tabs">
+                        <button class="pay-tab active" data-method="cash">Cash</button>
+                        <button class="pay-tab" data-method="installment">Installment</button>
+                        <button class="pay-tab" data-method="card">Bank Card</button>
+                        <button class="pay-tab" data-method="credit">Credit</button>
+                    </div>
+
+                    <!-- 1. Cash Form -->
+                    <div id="pay-cash-content" class="pay-content active">
+                        <p>Pay full amount via bank transfer or showroom cashiers upon vehicle handover.</p>
+                        <button id="confirm-cash-btn" class="btn-solid full-width">Confirm Cash Order</button>
+                    </div>
+
+                    <!-- 2. Installment Form -->
+                    <div id="pay-installment-content" class="pay-content hidden">
+                        <div class="form-group">
+                            <label>Select Term</label>
+                            <select id="installment-months">
+                                <option value="3">3 Months</option>
+                                <option value="6">6 Months</option>
+                                <option value="12" selected>12 Months</option>
+                                <option value="18">18 Months</option>
+                                <option value="24">24 Months</option>
+                            </select>
+                        </div>
+                        <div class="calc-box">
+                            <p>Monthly Payment: <strong id="monthly-payment-val">$0</strong></p>
+                            <p>Total with 5% Financing Fee: <strong id="installment-total-val">$0</strong></p>
+                        </div>
+                        <button id="confirm-installment-btn" class="btn-solid full-width">Apply for Installment</button>
+                    </div>
+
+                    <!-- 3. Bank Card Form -->
+                    <div id="pay-card-content" class="pay-content hidden">
+                        <div class="form-group">
+                            <label>Cardholder Name</label>
+                            <input type="text" placeholder="JOHN DOE">
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number (Demo Mode)</label>
+                            <input type="text" placeholder="4000 1234 5678 9010" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="password" placeholder="123" maxlength="3">
+                            </div>
+                        </div>
+                        <button id="confirm-card-btn" class="btn-solid full-width">Pay Now (Demo Secure)</button>
+                    </div>
+
+                    <!-- 4. Credit Form -->
+                    <div id="pay-credit-content" class="pay-content hidden">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="credit-name" required placeholder="Full Legal Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="credit-phone" required placeholder="+998 ...">
+                        </div>
+                        <div class="form-group">
+                            <label>Down Payment ($)</label>
+                            <input type="number" id="credit-downpayment" value="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (Months)</label>
+                            <select id="credit-duration">
+                                <option value="12">12 Months</option>
+                                <option value="24">24 Months</option>
+                                <option value="36" selected>36 Months</option>
+                                <option value="48">48 Months</option>
+                                <option value="60">60 Months</option>
+                            </select>
+                        </div>
+                        <button id="confirm-credit-btn" class="btn-solid full-width">Submit Credit Application</button>
+                    </div>
+
+                    <!-- Delivery & Address Section -->
+                    <div class="delivery-section">
+                        <h4>Delivery Details</h4>
+                        <div class="form-group">
+                            <input type="text" id="delivery-address" placeholder="Street Address, District, City" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="delivery-method-select">
+                                <option value="home">Home Delivery (+ $500)</option>
+                                <option value="showroom">Showroom Pickup (Free)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER TRACKING NOTIFICATION MODAL -->
+    <div id="tracking-modal" class="modal-overlay hidden">
+        <div class="tracking-modal-content text-center">
+            <button class="close-modal">&times;</button>
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Order Submitted Successfully!</h2>
+            <p>Your tracking reference number is: <strong id="tracking-ref-num">BMW-984210</strong></p>
+            <p class="status-badge">Status: <span id="order-status-text">Pending Approval</span></p>
+            <p class="small-text">Our representative will contact you within 30 minutes to finalize documentation.</p>
+            <button id="close-tracking-btn" class="btn-solid">Back to Showroom</button>
+        </div>
+    </div>
+
+    <!-- SECTION 11 — ABOUT BMW -->
+    <section id="about" class="about-section section-padding">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <span class="section-tag">HERITAGE & INNOVATION</span>
+                    <h2 class="section-title">Sheer Driving Pleasure</h2>
+                    <p>Since 1916, BMW has stood at the pinnacle of automotive engineering, combining precision German engineering, luxurious comfort, and uncompromising driving dynamics.</p>
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <i class="fas fa-bolt"></i>
+                            <div>
+                                <h4>Electric Future</h4>
+                                <p>Pioneering zero-emission mobility with the advanced i-Series electric fleet.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-flag-checkered"></i>
+                            <div>
+                                <h4>BMW M Performance</h4>
+                                <p>Born on the racetrack, engineered for the road. The most powerful letter in the world.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000&auto=format&fit=crop" alt="BMW Heritage">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 12 — REVIEWS -->
+    <section id="reviews" class="reviews-section section-padding bg-dark text-white">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag">TESTIMONIALS</span>
+                <h2 class="section-title">What Our Clients Say</h2>
+                <p class="section-desc text-light">Read genuine experiences from proud owners of our luxury fleet.</p>
+            </div>
+
+            <div class="reviews-grid" id="reviews-grid">
+                <!-- Populated via script -->
+            </div>
+
+            <div class="add-review-wrapper">
+                <h3>Leave Your Review</h3>
+                <form id="review-form" class="review-form">
+                    <div class="form-group">
+                        <input type="text" id="review-author" required placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <select id="review-rating">
+                            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                            <option value="3">⭐⭐⭐ (3/5)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="review-text" rows="3" required placeholder="Your experience with BMW dealership..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-solid">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 13 — CONTACT -->
+    <section id="contact" class="contact-section section-padding">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <span class="section-tag">GET IN TOUCH</span>
+                    <h2 class="section-title">Visit Our Flagship Showroom</h2>
+                    <p>Experience our vehicles firsthand. Book a private viewing or test drive with our expert consultants.</p>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> <span>Bunyodkor Avenue 42, Tashkent, Uzbekistan</span></li>
+                        <li><i class="fas fa-phone-alt"></i> <span>+998 (78) 150-50-50</span></li>
+                        <li><i class="fas fa-envelope"></i> <span>concierge@bmw-tashkent.uz</span></li>
+                        <li><i class="fas fa-clock"></i> <span>Mon - Sun: 9:00 AM - 8:00 PM</span></li>
+                    </ul>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form id="contact-form" class="contact-form">
+                        <h3>Send Us a Message</h3>
+                        <div class="form-group">
+                            <input type="text" required placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" required placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" required placeholder="Phone Number">
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="4" required placeholder="Inquiry details (e.g., Test drive booking for BMW i4)..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-solid full-width">Send Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 14 — FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <svg class="bmw-logo" viewBox="0 0 100 100" width="35" height="35">
+                        <circle cx="50" cy="50" r="48" fill="#000" stroke="#fff" stroke-width="2"/>
+                        <path d="M50 2 A 48 48 0 0 1 98 50 L 50 50 Z" fill="#0066B1"/>
+                        <path d="M50 98 A 48 48 0 0 1 2 50 L 50 50 Z" fill="#0066B1"/>
+                        <text x="32" y="20" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">B</text>
+                        <text x="58" y="20" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">M</text>
+                        <text x="78" y="42" fill="#fff" font-family="Arial" font-weight="bold" font-size="14">W</text>
+                    </svg>
+                    <span>BMW GROUP</span>
+                </div>
+                <div class="footer-socials">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-links-grid">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#models">Models</a></li>
+                        <li><a href="#electric">Electric Vehicles</a></li>
+                        <li><a href="#bmw-m">BMW M Series</a></li>
+                        <li><a href="#showroom-3d">3D Showroom</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Support</h4>
+                    <ul>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#contact">Book Test Drive</a></li>
+                        <li><a href="#about">Financing Calculator</a></li>
+                        <li><a href="#about">Warranty & Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Privacy</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Settings</a></li>
+                        <li><a href="#">Legal Disclaimer</a></li>
+                        <li><a href="#">Imprint</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BMW AG. All rights reserved. Demonstration Automotive Dealership Website.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript File -->
+    <script src="script.js"></script>
+</body>
+</html>
